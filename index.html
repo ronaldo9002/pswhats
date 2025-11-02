@@ -22,12 +22,8 @@
       margin: 20px auto;
     }
     @keyframes rotate {
-      0% {
-        transform: rotate(0);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+      0% { transform: rotate(0); }
+      100% { transform: rotate(360deg); }
     }
     h1 {
       text-align: center;
@@ -35,21 +31,7 @@
       font-size: 24px;
     }
   </style>
-  <script>
-    // Função para redirecionar para um grupo de WhatsApp aleatório
-    function redirecionar() {
-      var grupos = [
-        'https://wa.me/5581996267609?text=Oi%2C%20quero%20ver%20seus%20conteudos', // Grupo 1
-        'https://wa.me/5581996267609?text=Oi%2C%20quero%20ver%20seus%20conteudos' // Grupo 3
-      ];
-      var grupoAleatorio = grupos[Math.floor(Math.random() * grupos.length)];
-      window.location.href = grupoAleatorio;
-    }
-    // Função para enviar o evento de PageView para o Facebook
-    function enviarPixel() {
-      fbq('track', 'PageView');
-    }
-  </script>
+
   <!-- Pixel do Facebook -->
   <script>
     !function(f,b,e,v,n,t,s)
@@ -63,13 +45,37 @@
     fbq('init', '956814029145851');
     fbq('track', 'PageView');
   </script>
+
+  <script>
+    // Lista de números de WhatsApp com peso proporcional (20% cada)
+    const redirecionamentos = [
+      { link: 'https://wa.me/5582996670360?text=Oi%2C%20quero%20ver%20seus%20conteudos', peso: 20 },
+      { link: 'https://wa.me/5582996583043?text=Oi%2C%20quero%20ver%20seus%20conteudos', peso: 20 },
+	  { link: 'https://wa.me/5561984012951?text=Oi%2C%20quero%20ver%20seus%20conteudos', peso: 20 },
+	  { link: 'https://wa.me/5541995322855?text=Oi%2C%20quero%20ver%20seus%20conteudos', peso: 20 },
+	  { link: 'https://wa.me/5521960113973?text=Oi%2C%20quero%20ver%20seus%20conteudos', peso: 20 }
+    ];
+
+    // Escolhe link com base em peso
+    function escolherLinkPonderado(lista) {
+      const totalPeso = lista.reduce((acc, item) => acc + item.peso, 0);
+      let sorteio = Math.random() * totalPeso;
+      for (const item of lista) {
+        if (sorteio < item.peso) return item.link;
+        sorteio -= item.peso;
+      }
+    }
+
+    // Executa o redirecionamento e envia evento Pixel
+    function redirecionar() {
+      fbq('track', 'PageView');
+      const destino = escolherLinkPonderado(redirecionamentos);
+      window.location.href = destino;
+    }
+  </script>
 </head>
-<body onload="setTimeout(redirecionar, 5000); enviarPixel();">
+<body onload="setTimeout(redirecionar, 5000)">
   <div class="loading"></div>
   <h1>Aguarde alguns segundos, vou liberar o que prometi para você...</h1>
 </body>
 </html>
-
-
-
-
